@@ -4,6 +4,9 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import couleurs
 from termcolor import colored, cprint
+from colorama import init as colorama_init
+from colorama import Fore
+from colorama import Style
 
 
 def print_hi(name):
@@ -42,11 +45,12 @@ print_blue = lambda x: cprint(x, "blue")
 
 def AfficherPion(j, param):
     if j == 1:
-        print_red(param)
+        color = Fore.BLUE
     elif j == 2:
-        print_blue(param)
+        color = Fore.RED
     elif j == 0:
-        print(param, end='')
+        color = Fore.WHITE
+    print(f"{color}{j}{Style.RESET_ALL}", end='')
 
 
 def PrintPlateau():
@@ -102,4 +106,5 @@ PrintPlateau()
 PoserPion(2, 6, 6)
 PrintPlateau()
 
-cprint("Hello, World!", "green", "on_red")
+# colorama_init()
+# print(f"This is {Fore.GREEN}color{Style.RESET_ALL}!")
