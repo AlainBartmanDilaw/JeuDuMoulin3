@@ -68,6 +68,8 @@ def PrintPlateau():
 def PoserPion(Joueur: int, x: int, y: int):
     if plateau[x][y] == 'X':
         raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est inaccessible")
+    if plateau[x][y] != 0:
+        raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est déjà occupée")
     plateau[x][y] = Joueur
 
 
@@ -92,19 +94,23 @@ def DeplacerPion(Joueur: int, xDepart: int, yDepart: int, xArrivee: int, yArrive
     PrendrePion(Joueur, xDepart, yDepart)
     PoserPion(Joueur, xArrivee, yArrivee)
 
+try:
 
-rows, cols = (7, 7)
+    rows, cols = (7, 7)
+    plateau = [['X'] * cols for _ in range(rows)]
 
-plateau = [['X'] * cols for _ in range(rows)]
+    # // Initialisation du Plateau
+    PrintPlateau()
+    InitPlateau()
+    PrintPlateau()
+    PoserPion(1, 0, 0)
+    PrintPlateau()
+    PoserPion(2, 6, 6)
+    PrintPlateau()
+    PoserPion(1, 6, 6)
+    PrintPlateau()
 
-# // Initialisation du Plateau
-PrintPlateau()
-InitPlateau()
-PrintPlateau()
-PoserPion(1, 0, 0)
-PrintPlateau()
-PoserPion(2, 6, 6)
-PrintPlateau()
-
-# colorama_init()
-# print(f"This is {Fore.GREEN}color{Style.RESET_ALL}!")
+    # colorama_init()
+    # print(f"This is {Fore.GREEN}color{Style.RESET_ALL}!")
+except Exception as exc:
+    print(f"Exception {exc}")
