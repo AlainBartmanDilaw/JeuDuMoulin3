@@ -2,6 +2,8 @@
 
 # Press Maj+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import couleurs
+from termcolor import colored, cprint
 
 
 def print_hi(name):
@@ -16,7 +18,7 @@ def print_hi(name):
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
 def InitPlateau():
-
+    # Place des cases comme dans un repère orthonormé
     Cases = [
         (0, 0), (0, 3), (0, 6),
         (1, 1), (1, 3), (1, 5),
@@ -31,27 +33,73 @@ def InitPlateau():
             if (i, j) in Cases:
                 plateau[i][j] = 0
             # else:
-            #     arr[i][j] = None
+            #     arr[i][j] = 'X'
+
+
+print_red = lambda x: cprint(x, "red")
+print_blue = lambda x: cprint(x, "blue")
+
+
+def AfficherPion(j, param):
+    if j == 1:
+        print_red(param)
+    elif j == 2:
+        print_blue(param)
+    elif j == 0:
+        print(param, end='')
 
 
 def PrintPlateau():
+    print("-------------------------")
     for i in range(rows):
         for j in range(cols):
-            if plateau[i][j] == None:
+            if plateau[i][j] == 'X':
                 print('X', end='')
             else:
-                print("{:1d}".format(plateau[i][j]), end='')
-            print(" ", end='')
+                AfficherPion(plateau[i][j], "{:1d}".format(plateau[i][j]))
+            print(f" {couleurs.couleurs.ENDC}", end='')
         print("")
+
+
+def PoserPion(Joueur: int, x: int, y: int):
+    if plateau[x][y] == 'X':
+        raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est inaccessible")
+    plateau[x][y] = Joueur
+
+
+def ControlerJoueur(j: int, x: int, y: int):
+    '''
+    Contrôle que le joueur j possède un jeton sur la case (x,y)
+        Parameters:
+            j : numéro de joueur
+            x : position x
+            y : position y
+    '''
+    if plateau[x][y] != j:
+        raise Exception(f"Le joueur numéro {j} n'a pas de pion en position {x},{y}")
+
+
+def PrendrePion(Joueur, x, y):
+    ControlerJoueur(Joueur, x, y)
+    plateau[x][y] = 'X'
+
+
+def DeplacerPion(Joueur: int, xDepart: int, yDepart: int, xArrivee: int, yArrivee: int):
+    PrendrePion(Joueur, xDepart, yDepart)
+    PoserPion(Joueur, xArrivee, yArrivee)
 
 
 rows, cols = (7, 7)
 
-plateau = 0
-
-plateau = [[None] * cols for _ in range(rows)]
-
+plateau = [['X'] * cols for _ in range(rows)]
 
 # // Initialisation du Plateau
+PrintPlateau()
 InitPlateau()
 PrintPlateau()
+PoserPion(1, 0, 0)
+PrintPlateau()
+PoserPion(2, 6, 6)
+PrintPlateau()
+
+cprint("Hello, World!", "green", "on_red")
