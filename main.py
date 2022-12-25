@@ -43,12 +43,14 @@ print_red = lambda x: cprint(x, "red")
 print_blue = lambda x: cprint(x, "blue")
 
 
-def AfficherPion(j, param):
-    if j == 1:
-        color = Fore.BLUE
-    elif j == 2:
-        color = Fore.RED
-    elif j == 0:
+def AfficherPion(j):
+    if j == "1":
+        color = Fore.LIGHTBLUE_EX
+    elif j == "2":
+        color = Fore.LIGHTGREEN_EX
+    elif j == "0":
+        color = Fore.LIGHTYELLOW_EX
+    elif j == 'X':
         color = Fore.WHITE
     print(f"{color}{j}{Style.RESET_ALL}", end='')
 
@@ -58,9 +60,9 @@ def PrintPlateau():
     for i in range(rows):
         for j in range(cols):
             if plateau[i][j] == 'X':
-                print('X', end='')
+                AfficherPion(plateau[i][j] )
             else:
-                AfficherPion(plateau[i][j], "{:1d}".format(plateau[i][j]))
+                AfficherPion("{:1d}".format(plateau[i][j]))
             print(f" {couleurs.couleurs.ENDC}", end='')
         print("")
 
