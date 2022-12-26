@@ -59,7 +59,7 @@ def PrintPlateau():
     for i in range(rows):
         for j in range(cols):
             if plateau[i][j] == 'X':
-                AfficherPion(plateau[i][j] )
+                AfficherPion(plateau[i][j])
             else:
                 AfficherPion("{:1d}".format(plateau[i][j]))
             print(f" ", end='')
