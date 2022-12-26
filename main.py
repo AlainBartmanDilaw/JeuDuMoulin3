@@ -2,7 +2,7 @@
 
 # Press Maj+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-import couleurs
+# import couleurs
 # from termcolor import colored, cprint
 from colorama import init as colorama_init
 from colorama import Fore
@@ -63,7 +63,7 @@ def PrintPlateau():
                 AfficherPion(plateau[i][j] )
             else:
                 AfficherPion("{:1d}".format(plateau[i][j]))
-            print(f" {couleurs.couleurs.ENDC}", end='')
+            print(f" ", end='')
         print("")
 
 
