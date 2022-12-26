@@ -3,7 +3,7 @@
 # Press Maj+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import couleurs
-from termcolor import colored, cprint
+# from termcolor import colored, cprint
 from colorama import init as colorama_init
 from colorama import Fore
 from colorama import Style
@@ -39,8 +39,8 @@ def InitPlateau():
             #     arr[i][j] = 'X'
 
 
-print_red = lambda x: cprint(x, "red")
-print_blue = lambda x: cprint(x, "blue")
+# print_red = lambda x: cprint(x, "red")
+# print_blue = lambda x: cprint(x, "blue")
 
 
 def AfficherPion(j):
@@ -96,6 +96,11 @@ def DeplacerPion(Joueur: int, xDepart: int, yDepart: int, xArrivee: int, yArrive
     PrendrePion(Joueur, xDepart, yDepart)
     PoserPion(Joueur, xArrivee, yArrivee)
 
+
+def WriteError(message):
+    print(f"{Fore.RED}{message}{Style.RESET_ALL}")
+
+
 try:
 
     rows, cols = (7, 7)
@@ -115,4 +120,4 @@ try:
     # colorama_init()
     # print(f"This is {Fore.GREEN}color{Style.RESET_ALL}!")
 except Exception as exc:
-    print(f"Exception {exc}")
+    WriteError(exc)
