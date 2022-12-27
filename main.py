@@ -61,7 +61,13 @@ def PrintPlateau():
         print("")
 
 
+def ControlePosition(x: int, y: int):
+    if (x < 0 or x >= rows) or (y < 0 or y >= cols):
+        raise Exception(f"Les coordonnées fournies ({x},{y}) sont hors du périmètre.")
+
+
 def PoserPion(Joueur: int, x: int, y: int):
+    ControlePosition(x, y)
     if plateau[x][y] == 'X':
         raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est inaccessible")
     if plateau[x][y] != 0:
