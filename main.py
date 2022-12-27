@@ -120,6 +120,10 @@ def EndOfGame():
         print(f"Fin de partie !")
 
 
+def InitPlateau7x7():
+    global rows, cols, pions, plateau
+    rows, cols, nbrPions = (7, 7, 9)
+    pions = [0, nbrPions, nbrPions]
     plateau = [['X'] * cols for _ in range(rows)]
 
     # // Initialisation du Plateau
