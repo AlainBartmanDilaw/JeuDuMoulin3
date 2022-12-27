@@ -37,7 +37,7 @@ def PoserPion(Joueur: int, x: int, y: int):
         raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est inaccessible")
     if plateau[x][y] != 0:
         raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est déjà occupée")
-    plateau[x][y] = Joueur
+    plateau[x][y] = Joueur+1
     PrintPlateau()
 
 
@@ -108,19 +108,20 @@ def InitPlateau7x7():
     PrintPlateau()
 
 
-try:
-    plateau: any = None
 
-    # // Initialisation du Plateau
-    # TODO : Choix du plateau.
-    InitPlateau7x7()
+plateau: any = None
+# // Initialisation du Plateau
+# TODO : Choix du plateau.
+InitPlateau7x7()
 
+joueur = 0
+while True:
+    try:
 
-    PoserPion(1, 0, 0)
-    PoserPion(2, 6, 6)
-    PoserPion(2, 7, 7)
-    EndOfGame()
-    PoserPion(1, 6, 6)
+        PoserPion(joueur, 0, 0)
+        EndOfGame()
+        joueur = (joueur + 1) % 2
+        break
 
-except Exception as exc:
-    WriteError(exc)
+    except Exception as exc:
+        WriteError(exc)
