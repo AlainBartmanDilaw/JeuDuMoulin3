@@ -101,7 +101,18 @@ def WriteError(message):
     print(f"{Fore.RED}{message}{Style.RESET_ALL}")
 
 
-try:
+def CheckPlateau():
+    nbr = [0, 0, 0]
+    for i in range(rows):
+        for j in range(cols):
+            if plateau[i][j] != 'X':
+                nbr[plateau[i][j]] = nbr[plateau[i][j]] + 1
+    if nbr[1] < 3:
+        return 1
+    if nbr[2] < 3:
+        return 2
+    return 0
+
 
     rows, cols = (7, 7)
     plateau = [['X'] * cols for _ in range(rows)]
