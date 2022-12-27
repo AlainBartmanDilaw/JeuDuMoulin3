@@ -4,26 +4,6 @@ from colorama import Fore
 from colorama import Style
 
 
-def InitPlateau():
-    # Place des cases comme dans un repère orthonormé
-    Cases = [
-        (0, 0), (0, 3), (0, 6),
-        (1, 1), (1, 3), (1, 5),
-        (2, 2), (2, 3), (2, 4),
-        (3, 0), (3, 1), (3, 2), (3, 4), (3, 5), (3, 6),
-        (4, 2), (4, 3), (4, 4),
-        (5, 1), (5, 3), (5, 5),
-        (6, 0), (6, 3), (6, 6),
-    ]
-    for i in range(rows):
-        for j in range(cols):
-            if (i, j) in Cases:
-                plateau[i][j] = 0
-            # else:
-            #     arr[i][j] = 'X'
-    PrintPlateau()
-
-
 def AfficherPion(j: int | str):
     color = Fore.MAGENTA
     if j == 1:
@@ -109,17 +89,32 @@ def InitPlateau7x7():
     global rows, cols, pions, plateau
     rows, cols, nbrPions = (7, 7, 9)
     pions = [0, nbrPions, nbrPions]
+    # Initialisation du plateau 7x7 avec un X - position interdite
     plateau = [['X'] * cols for _ in range(rows)]
+    # Place des cases comme dans un repère orthonormé
+    Cases = [
+        (0, 0), (0, 3), (0, 6),
+        (1, 1), (1, 3), (1, 5),
+        (2, 2), (2, 3), (2, 4),
+        (3, 0), (3, 1), (3, 2), (3, 4), (3, 5), (3, 6),
+        (4, 2), (4, 3), (4, 4),
+        (5, 1), (5, 3), (5, 5),
+        (6, 0), (6, 3), (6, 6),
+    ]
+    for i in range(rows):
+        for j in range(cols):
+            if (i, j) in Cases:
+                plateau[i][j] = 0
+    PrintPlateau()
 
 
 try:
     plateau: any = None
+
+    # // Initialisation du Plateau
     # TODO : Choix du plateau.
     InitPlateau7x7()
 
-    # // Initialisation du Plateau
-    PrintPlateau()
-    InitPlateau()
 
     PoserPion(1, 0, 0)
     PoserPion(2, 6, 6)
