@@ -3,29 +3,40 @@
 from colorama import Fore
 from colorama import Style
 
+EMPTY = 2
+
+
+def DecodeValeur(j):
+    match j:
+        case 'X':
+            return 'X'
+        case 2:
+            return '*'
+        case _:
+            return NomJoueurs[j][0]
+
 
 def AfficherPion(j: int | str):
-    color = Fore.MAGENTA
-    if j == 1:
-        color = Fore.LIGHTBLUE_EX
-    elif j == 2:
-        color = Fore.LIGHTGREEN_EX
-    elif j == 0:
-        color = Fore.LIGHTYELLOW_EX
-    elif j == 'X':
+    global ColorJoueurs
+    if j == 'X':
         color = Fore.WHITE
-    Write(f"{color}{j}{Style.RESET_ALL}")
+    else:
+        color = ColorJoueurs[j]
+    Write(f"{color}{DecodeValeur(j)}{Style.RESET_ALL}")
 
 
 def Write(texte):
     print(f"{texte}", end='')
 
-systemColor=Fore.MAGENTA
+
+systemColor = Fore.MAGENTA
+
+
 def PrintPlateau():
     print("-------------------------")
-    for i in range(rows).__reversed__():
-        Write(f"{systemColor}{i} : {Style.RESET_ALL}")
-        for j in range(cols):
+    for j in range(rows).__reversed__():
+        Write(f"{systemColor}{j} : {Style.RESET_ALL}")
+        for i in range(cols):
             AfficherPion(plateau[i][j])
             Write(f" ")
         print("")
@@ -35,19 +46,18 @@ def PrintPlateau():
     print("")
 
 
-
 def ControlePosition(x: int, y: int):
-    if (x < 0 or x >= rows) or (y < 0 or y >= cols):
+    if (x < 0 or x >= cols) or (y < 0 or y >= rows):
         raise Exception(f"Les coordonnées fournies ({x},{y}) sont hors du périmètre.")
+    if plateau[x][y] == 'X':
+        raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est inaccessible")
+    if plateau[x][y] != EMPTY:
+        raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est déjà occupée")
 
 
 def PoserPion(Joueur: int, x: int, y: int):
     ControlePosition(x, y)
-    if plateau[x][y] == 'X':
-        raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est inaccessible")
-    if plateau[x][y] != 0:
-        raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est déjà occupée")
-    plateau[x][y] = Joueur+1
+    plateau[x][y] = Joueur
     PrintPlateau()
 
 
@@ -59,8 +69,9 @@ def ControlerJoueur(j: int, x: int, y: int):
             x : position x
             y : position y
     '''
+    global NomJoueurs
     if plateau[x][y] != j:
-        raise Exception(f"Le joueur numéro {j} n'a pas de pion en position {x},{y}")
+        raise Exception(f"Le joueur numéro {NomJoueurs[j]} n'a pas de pion en position {x},{y}")
 
 
 def PrendrePion(Joueur, x, y):
@@ -83,15 +94,15 @@ def CheckPlateau():
         for j in range(cols):
             if plateau[i][j] != 'X':
                 nbr[plateau[i][j]] = nbr[plateau[i][j]] + 1
+    if nbr[0] < 3:
+        return 0
     if nbr[1] < 3:
         return 1
-    if nbr[2] < 3:
-        return 2
-    return 0
+    return EMPTY
 
 
 def EndOfGame():
-    if pions[0] == 0 and pions[1] == 0 and CheckPlateau() != 0:
+    if pions[0] == 0 and pions[1] == 0 and CheckPlateau() != EMPTY:
         print(f"Fin de partie !")
         return True
     return False
@@ -100,7 +111,7 @@ def EndOfGame():
 def InitPlateau7x7():
     global rows, cols, pions, plateau
     rows, cols, nbrPions = (7, 7, 9)
-    pions = [0, nbrPions, nbrPions]
+    pions = [nbrPions, nbrPions]
     # Initialisation du plateau 7x7 avec un X - position interdite
     plateau = [['X'] * cols for _ in range(rows)]
     # Place des cases comme dans un repère orthonormé
@@ -116,28 +127,47 @@ def InitPlateau7x7():
     for i in range(rows):
         for j in range(cols):
             if (i, j) in Cases:
-                plateau[i][j] = 0
+                plateau[i][j] = EMPTY
     PrintPlateau()
 
 
-
 plateau: any = None
+NomJoueurs = ["Alain", "Jébril"]
+ColorJoueurs = [Fore.LIGHTBLUE_EX, Fore.LIGHTGREEN_EX, Fore.LIGHTYELLOW_EX]
+
 # // Initialisation du Plateau
 # TODO : Choix du plateau.
 InitPlateau7x7()
 
-NomJoueurs = ["Joueur 1", "Joueur 2"]
-
 joueur = 0
+
+
+def GetJoueur():
+    return NomJoueurs[joueur]
+
+
+def GetCase():
+    while True:
+        try:
+            x = int(input("Saisir l'abscisse x de la case : "))
+            y = int(input("Saisir l'ordonnée y de la case : "))
+            ControlePosition(x, y)
+            break
+        except Exception as exc:
+            WriteError(exc)
+    return x, y
+
+
 while True:
     try:
 
+        case = GetCase()
 
-        PoserPion(joueur, 0, 0)
+        PoserPion(joueur, case[0], case[1])
         if EndOfGame():
             break;
         joueur = (joueur + 1) % 2
-        print(f"On passe au joueur {joueur}")
+        print(f"On passe au joueur {GetJoueur()}")
 
     except Exception as exc:
         WriteError(exc)
