@@ -41,14 +41,11 @@ def InitPlateau():
 
 def AfficherPion(j: int | str):
     color = Fore.MAGENTA
-
-
-def AfficherPion(j):
-    if j == "1":
+    if j == 1:
         color = Fore.LIGHTBLUE_EX
-    elif j == "2":
+    elif j == 2:
         color = Fore.LIGHTGREEN_EX
-    elif j == "0":
+    elif j == 0:
         color = Fore.LIGHTYELLOW_EX
     elif j == 'X':
         color = Fore.WHITE
@@ -59,10 +56,7 @@ def PrintPlateau():
     print("-------------------------")
     for i in range(rows).__reversed__():
         for j in range(cols):
-            if plateau[i][j] == 'X':
-                AfficherPion(plateau[i][j])
-            else:
-                AfficherPion("{:1d}".format(plateau[i][j]))
+            AfficherPion(plateau[i][j])
             print(f" ", end='')
         print("")
 
