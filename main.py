@@ -73,6 +73,7 @@ def PoserPion(Joueur: int, x: int, y: int):
     if plateau[x][y] != 0:
         raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est déjà occupée")
     plateau[x][y] = Joueur
+    PrintPlateau()
 
 
 def ControlerJoueur(j: int, x: int, y: int):
