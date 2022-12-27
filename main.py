@@ -114,7 +114,11 @@ def CheckPlateau():
     return 0
 
 
-    rows, cols = (7, 7)
+def EndOfGame():
+    if pions[0] == 0 and pions[1] == 0 and CheckPlateau() != 0:
+        print(f"Fin de partie !")
+
+
     plateau = [['X'] * cols for _ in range(rows)]
 
     # // Initialisation du Plateau
