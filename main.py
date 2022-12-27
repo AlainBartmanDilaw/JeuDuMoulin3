@@ -56,7 +56,7 @@ def AfficherPion(j):
 
 def PrintPlateau():
     print("-------------------------")
-    for i in range(rows):
+    for i in range(rows).__reversed__():
         for j in range(cols):
             if plateau[i][j] == 'X':
                 AfficherPion(plateau[i][j])
