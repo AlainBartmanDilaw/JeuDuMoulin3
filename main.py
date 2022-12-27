@@ -14,16 +14,26 @@ def AfficherPion(j: int | str):
         color = Fore.LIGHTYELLOW_EX
     elif j == 'X':
         color = Fore.WHITE
-    print(f"{color}{j}{Style.RESET_ALL}", end='')
+    Write(f"{color}{j}{Style.RESET_ALL}")
 
 
+def Write(texte):
+    print(f"{texte}", end='')
+
+systemColor=Fore.MAGENTA
 def PrintPlateau():
     print("-------------------------")
     for i in range(rows).__reversed__():
+        Write(f"{systemColor}{i} : {Style.RESET_ALL}")
         for j in range(cols):
             AfficherPion(plateau[i][j])
-            print(f" ", end='')
+            Write(f" ")
         print("")
+    Write("    ")
+    for j in range(cols):
+        Write(f"{systemColor}{j} {Style.RESET_ALL}")
+    print("")
+
 
 
 def ControlePosition(x: int, y: int):
@@ -117,6 +127,7 @@ InitPlateau7x7()
 joueur = 0
 while True:
     try:
+
 
         PoserPion(joueur, 0, 0)
         EndOfGame()
