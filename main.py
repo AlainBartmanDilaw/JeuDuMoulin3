@@ -38,8 +38,8 @@ def InitPlateau():
             #     arr[i][j] = 'X'
 
 
-# print_red = lambda x: cprint(x, "red")
-# print_blue = lambda x: cprint(x, "blue")
+def AfficherPion(j: int | str):
+    color = Fore.MAGENTA
 
 
 def AfficherPion(j):
