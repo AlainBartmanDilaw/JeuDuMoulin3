@@ -93,6 +93,8 @@ def CheckPlateau():
 def EndOfGame():
     if pions[0] == 0 and pions[1] == 0 and CheckPlateau() != 0:
         print(f"Fin de partie !")
+        return True
+    return False
 
 
 def InitPlateau7x7():
@@ -124,15 +126,19 @@ plateau: any = None
 # TODO : Choix du plateau.
 InitPlateau7x7()
 
+NomJoueurs = ["Joueur 1", "Joueur 2"]
+
 joueur = 0
 while True:
     try:
 
 
         PoserPion(joueur, 0, 0)
-        EndOfGame()
+        if EndOfGame():
+            break;
         joueur = (joueur + 1) % 2
-        break
+        print(f"On passe au joueur {joueur}")
 
     except Exception as exc:
         WriteError(exc)
+        break
