@@ -36,6 +36,7 @@ def InitPlateau():
                 plateau[i][j] = 0
             # else:
             #     arr[i][j] = 'X'
+    PrintPlateau()
 
 
 def AfficherPion(j: int | str):
