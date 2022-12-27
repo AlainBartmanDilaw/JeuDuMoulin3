@@ -126,16 +126,21 @@ def InitPlateau7x7():
     pions = [0, nbrPions, nbrPions]
     plateau = [['X'] * cols for _ in range(rows)]
 
+
+try:
+    plateau: any = None
+    # TODO : Choix du plateau.
+    InitPlateau7x7()
+
     # // Initialisation du Plateau
     PrintPlateau()
     InitPlateau()
-    PrintPlateau()
+
     PoserPion(1, 0, 0)
-    PrintPlateau()
     PoserPion(2, 6, 6)
-    PrintPlateau()
+    PoserPion(2, 7, 7)
+    EndOfGame()
     PoserPion(1, 6, 6)
-    PrintPlateau()
 
     # colorama_init()
     # print(f"This is {Fore.GREEN}color{Style.RESET_ALL}!")
