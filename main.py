@@ -162,7 +162,7 @@ while True:
 
         case = GetCase()
 
-        PoserPion(case[0], case[1])
+        PoserPion(case)
 
         if EndOfGame():
             break
