@@ -2,6 +2,7 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import signal
 import sys
+import traceback
 
 import Communes
 from colorama import Fore, Back
@@ -171,4 +172,5 @@ while True:
 
     except Exception as exc:
         WriteError(exc)
+        WriteError(traceback.format_exc())
         break
