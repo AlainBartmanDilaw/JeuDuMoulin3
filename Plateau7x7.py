@@ -57,6 +57,8 @@ def InitPlateau7x7():
             if elem != None:
                 value = Communes.Empty
             Communes.plateau[i][j] = value
+    Communes.pions[0] = Communes.nbrPions
+    Communes.pions[1] = Communes.nbrPions
 
 
 def ControleCases(Cases):
