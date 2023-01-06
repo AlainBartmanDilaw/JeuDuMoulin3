@@ -5,16 +5,12 @@ import sys
 import traceback
 
 import Communes
-from colorama import Fore, Back
-from colorama import Style
 
 from Plateau7x7 import InitPlateau7x7
 
 # import fltk
 
 NomJoueurs = ["Alain", "Jébril"]
-ColorJoueurs = [Back.BLUE, Back.LIGHTGREEN_EX, Fore.LIGHTYELLOW_EX]
-systemColor = Fore.MAGENTA
 
 
 def signal_handler(sig, frame):
@@ -24,25 +20,24 @@ def signal_handler(sig, frame):
 
 def DecodeValeur(j: any):
     match j:
-        case 'X':
-            return 'X'
+        case Communes.NOCASE:
+            return Communes.NOCASE
         case 2:
-            return '*'
+            return Communes.EMPTYCASE
         case _:
-            return NomJoueurs[j][0]
+            return NomJoueurs[j][0]  # Premier caractère du prénom
 
 
 def AfficherPion(j: int | str):
-    global ColorJoueurs
-    if j == 'X':
-        color = Fore.WHITE
+    if j == Communes.NOCASE:
+        color = Communes.colors.fg.lightgreen
     else:
-        color = ColorJoueurs[j]
+        color = Communes.ColorJoueurs[j]
     Write(f"{color}{DecodeValeur(j)}")
 
 
 def Write(texte):
-    print(f"{texte}{Style.RESET_ALL}", end='')
+    print(f"{texte}{Communes.colors.reset}", end='')
 
 
 def CaseToXY(case):
@@ -53,16 +48,16 @@ def ControlePosition(case):
     x, y = CaseToXY(case)
     if (x < 0 or x >= Communes.cols) or (y < 0 or y >= Communes.rows):
         raise Exception(f"Les coordonnées fournies ({x},{y}) sont hors du périmètre.")
-    if Communes.plateau[x][y] == 'X':
+    if Communes.plateau[x][y] == Communes.NOCASE:
         raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est inaccessible")
     if Communes.plateau[x][y] != Communes.Empty:
-        raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est déjà occupée")
+        raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est déjà occupée par le joueur {GetJoueur(Communes.plateau[x][y])}")
 
 
 def PoserPion(case):
     x, y = CaseToXY(case)
     ControlePosition(case)
-    Communes.plateau[x][y] = joueur
+    Communes.plateau[x][y] = Communes.joueur
 
 
 def ControlerJoueur(case):
@@ -75,14 +70,14 @@ def ControlerJoueur(case):
             y : position y
     '''
     global NomJoueurs
-    if Communes.plateau[x][y] != joueur:
+    if Communes.plateau[x][y] != Communes.joueur:
         raise Exception(f"Le joueur numéro {GetJoueur()} n'a pas de pion en position {x},{y}")
 
 
 def PrendrePion(case):
     x, y = CaseToXY(case)
     ControlerJoueur(case)
-    Communes.plateau[x][y] = 'X'
+    Communes.plateau[x][y] = Communes.NOCASE
 
 
 def DeplacerPion(caseDepart, caseArrivee):
@@ -91,14 +86,14 @@ def DeplacerPion(caseDepart, caseArrivee):
 
 
 def WriteError(message):
-    print(f"{Back.RED}{message}{Style.RESET_ALL}")
+    print(f"{Communes.colors.bg.red}{Communes.colors.fg.black}{message}{Communes.colors.reset}")
 
 
 def CheckPlateau():
     nbr = [0, 0, 0]
     for i in range(Communes.rows):
         for j in range(Communes.cols):
-            if Communes.plateau[i][j] != 'X':
+            if Communes.plateau[i][j] != Communes.NOCASE:
                 nbr[Communes.plateau[i][j]] = nbr[Communes.plateau[i][j]] + 1
     if nbr[0] < 3:
         return 0
@@ -119,8 +114,8 @@ def EndOfGame():
     return False
 
 
-def GetJoueur():
-    return NomJoueurs[joueur]
+def GetJoueur(Joueur = Communes.joueur):
+    return NomJoueurs[Joueur]
 
 
 def GetCase():
@@ -138,14 +133,14 @@ def GetCase():
 def PrintPlateau():
     print("-------------------------")
     for j in range(Communes.rows).__reversed__():
-        Write(f"{systemColor}{j} : ")
+        Write(f"{Communes.systemColor}{j} : ")
         for i in range(Communes.cols):
             AfficherPion(Communes.plateau[i][j])
             Write(f" ")
         print("")
     Write("    ")
     for j in range(Communes.cols):
-        Write(f"{systemColor}{j} ")
+        Write(f"{Communes.systemColor}{j} ")
     print("")
 
 
@@ -155,7 +150,20 @@ signal.signal(signal.SIGINT, signal_handler)
 # TODO : Choix du plateau.
 InitPlateau7x7()
 
-joueur = 0
+
+
+def ChangerJoueur():
+    Communes.joueur = (Communes.joueur + 1) % 2
+    print(f"On passe au joueur {GetJoueur()}")
+
+
+def Tester3PionsAlignes():
+    pass
+
+
+#
+# Boucle principale interactive de test en version console
+#
 while True:
     try:
 
@@ -165,10 +173,11 @@ while True:
 
         PoserPion(case)
 
+        Tester3PionsAlignes()
+
         if EndOfGame():
             break
-        joueur = (joueur + 1) % 2
-        print(f"On passe au joueur {GetJoueur()}")
+        ChangerJoueur()
 
     except Exception as exc:
         WriteError(exc)

@@ -11,7 +11,7 @@ def TrouveCase(Cases, v):
 def InitPlateau7x7():
     Communes.rows, Communes.cols, Communes.nbrPions = (7, 7, 9)
     # Initialisation du plateau 7x7 avec un X - position interdite
-    Communes.plateau = [['X'] * Communes.cols for _ in range(Communes.rows)]
+    Communes.plateau = [[Communes.NOCASE] * Communes.cols for _ in range(Communes.rows)]
     # Place des cases comme dans un repère orthonormé
     Cases = [
         # Rang 0
