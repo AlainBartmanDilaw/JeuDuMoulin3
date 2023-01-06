@@ -8,9 +8,8 @@ import Communes
 
 from Plateau7x7 import InitPlateau7x7
 
-# import fltk
 
-NomJoueurs = ["Alain", "Jébril"]
+# import fltk
 
 
 def signal_handler(sig, frame):
@@ -25,7 +24,7 @@ def DecodeValeur(j: any):
         case 2:
             return Communes.EMPTYCASE
         case _:
-            return NomJoueurs[j][0]  # Premier caractère du prénom
+            return Communes.NomJoueurs[j][0]  # Premier caractère du prénom
 
 
 def AfficherPion(j: int | str):
@@ -70,9 +69,8 @@ def ControlerJoueur(case):
             x : position x
             y : position y
     '''
-    global NomJoueurs
     if Communes.plateau[x][y] != Communes.joueur:
-        raise Exception(f"Le joueur numéro {GetJoueur()} n'a pas de pion en position {x},{y}")
+        raise Exception(f"Le joueur numéro {GetJoueur(Communes.joueur)} n'a pas de pion en position {x},{y}")
 
 
 def PrendrePion(case):
@@ -115,16 +113,39 @@ def EndOfGame():
     return False
 
 
-def GetJoueur(Joueur=Communes.joueur):
-    return NomJoueurs[Joueur]
+def GetJoueur(j):
+    return Communes.NomJoueurs[j]
 
 
 def GetCase():
     while True:
         try:
-            x = int(input(f"{GetJoueur()} : Saisir l'abscisse x de la case : "))
-            y = int(input(f"{GetJoueur()} : Saisir l'ordonnée y de la case : "))
+            x = int(input(f"{GetJoueur(Communes.joueur)} : Saisir l'abscisse x de la case : "))
+            y = int(input(f"{GetJoueur(Communes.joueur)} : Saisir l'ordonnée y de la case : "))
             ControlePosition((x, y))
+            break
+        except Exception as exc:
+            WriteError(exc)
+    return x, y
+
+
+def CheckCaseAdv(case, adv):
+    (x, y) = CaseToXY(case)
+    if (x < 0 or x >= Communes.cols) or (y < 0 or y >= Communes.rows):
+        raise Exception(f"Les coordonnées fournies ({x},{y}) sont hors du périmètre.")
+    if Communes.plateau[x][y] == Communes.NOCASE:
+        raise Exception(f"Impossible de sélection cette position {x} {y} - la case est inaccessible")
+    if Communes.plateau[x][y] != adv:
+        raise Exception(
+            f"Cette case ({x} {y}) n'est pas occupée par votre adversaire {GetJoueur(adv)}")
+
+
+def GetCaseAdv(adv):
+    while True:
+        try:
+            x = int(input(f"{GetJoueur(Communes.joueur)} : Saisir l'abscisse x de la case : "))
+            y = int(input(f"{GetJoueur(Communes.joueur)} : Saisir l'ordonnée y de la case : "))
+            CheckCaseAdv((x, y), adv)
             break
         except Exception as exc:
             WriteError(exc)
@@ -158,7 +179,7 @@ def JoueurAdverse():
 
 def ChangerJoueur():
     Communes.joueur = JoueurAdverse()
-    print(f"On passe au joueur {GetJoueur()}")
+    print(f"On passe au joueur {GetJoueur(Communes.joueur)}")
 
 
 def Tester3PionsAlignes(case):
@@ -169,8 +190,14 @@ def Tester3PionsAlignes(case):
     :return: True si c'est le cas, False sinon
     '''
 
-
-
+    for elem in Communes.Moulins:
+        if case in elem:
+            nbr = 0
+            for x in elem:
+                if Communes.plateau[x[0]][x[1]] == Communes.joueur:
+                    nbr = nbr + 1
+            if nbr == 3:
+                return True
     return False
 
 
@@ -178,25 +205,26 @@ def Tester3PionsAlignes(case):
 # Boucle principale interactive de test en version console
 #
 def SupprimerPion(adversaire):
+    print(f"Suppression d'un pion de votre adversaire {GetJoueur(adversaire)}")
     ok = False
     while ok != True:
 
         ok = True
         # Saisir la case (x,y) à supprimer
-        x = y = 0
-        case = (x, y)
-        # Test case saisie est bien à l'adversaire
-        if Communes.plateau[x][y] != adversaire:
-            ok = False
-            WriteError(f"Le joueur numéro {GetJoueur(adversaire)} n'a pas de pion en position {x},{y}")
+        case = GetCaseAdv(adversaire)
+        # # Test case saisie est bien à l'adversaire
+        # if Communes.plateau[x][y] != adversaire:
+        #     ok = False
+        #     WriteError(f"Le joueur numéro {GetJoueur(adversaire)} n'a pas de pion en position {x},{y}")
 
-        PrendrePion(case)
+        x, y = CaseToXY(case)
+        Communes.plateau[x][y] = Communes.NOCASE
 
 
 while True:
     try:
 
-        case = GetCase()
+        PrintPlateau()
 
         # Choix de l'action
         if Communes.pions[0] > 0 and Communes.pions[1] > 0:

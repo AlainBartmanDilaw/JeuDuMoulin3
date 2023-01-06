@@ -2,6 +2,13 @@ import Communes
 from TrouverCase import TrouverCase
 
 
+def TransposerMoulins(Moulins):
+    for elem in Moulins:
+        for case in elem:
+            print(case)
+    return Moulins
+
+
 def InitPlateau7x7():
     Communes.rows, Communes.cols, Communes.nbrPions = (7, 7, 9)
     # Initialisation du plateau 7x7 avec un X - position interdite
@@ -42,10 +49,29 @@ def InitPlateau7x7():
         {'case': (6, 6), 'voisins': ((6, 3), (3, 6))},
     ]
 
+    Moulins = [
+        [(0, 0), (3, 0), (6, 0)],
+        [(1, 1), (3, 1), (5, 1)],
+        [(2, 2), (3, 2), (4, 2)],
+        [(0, 3), (1, 3), (2, 3)],
+        [(4, 3), (5, 3), (6, 3)],
+        [(2, 4), (3, 4), (4, 4)],
+        [(1, 5), (3, 5), (5, 5)],
+        [(0, 6), (3, 6), (6, 6)],
+    ]
+
+    temp = Moulins.copy()
+    for elem in temp:
+        newElem = []
+        for case in elem:
+            newCase = (case[1], case[0])
+            newElem.append(newCase)
+        Moulins.append(newElem)
+
     Communes.DonneesPlateau = Cases
+    Communes.Moulins = Moulins
 
-
-    ControleCases(Cases)
+    # ControleCases(Cases)
 
     for i in range(Communes.rows):
         for j in range(Communes.cols):
