@@ -1,11 +1,5 @@
 import Communes
-
-
-def TrouveCase(Cases, v):
-    for elem in Cases:
-        if elem['case'] == v:
-            return elem
-    return None
+from TrouverCase import TrouverCase
 
 
 def InitPlateau7x7():
@@ -48,12 +42,15 @@ def InitPlateau7x7():
         {'case': (6, 6), 'voisins': ((6, 3), (3, 6))},
     ]
 
+    Communes.DonneesPlateau = Cases
+
+
     ControleCases(Cases)
 
     for i in range(Communes.rows):
         for j in range(Communes.cols):
             value = Communes.plateau[i][j]
-            elem = TrouveCase(Cases, (i, j))
+            elem = TrouverCase(Cases, (i, j))
             if elem != None:
                 value = Communes.Empty
             Communes.plateau[i][j] = value
@@ -67,7 +64,7 @@ def ControleCases(Cases):
         voisins = elem['voisins']
         for v in voisins:
             # print(f"{case} - {v}")
-            voisins_voisins = TrouveCase(Cases, v)
+            voisins_voisins = TrouverCase(Cases, v)
             if voisins_voisins is None:
                 raise Exception(f"Impossible de retrouver le voisin : {v} de la case {case}")
             else:

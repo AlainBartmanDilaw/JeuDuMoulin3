@@ -21,3 +21,5 @@ ColorJoueurs = [colors.fg.black + colors.bg.cyan, # Joueur 1
                 colors.fg.pink # Case vide
                 ]
 systemColor = colors.fg.cyan
+
+DonneesPlateau = []

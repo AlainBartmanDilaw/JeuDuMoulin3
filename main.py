@@ -133,7 +133,7 @@ def GetCase():
 
 def PrintPlateau():
     print("-------------------------")
-    for j in range(Communes.rows).__reversed__():
+    for j in range(Communes.rows):
         Write(f"{Communes.systemColor}{j} : ")
         for i in range(Communes.cols):
             AfficherPion(Communes.plateau[i][j])
@@ -161,8 +161,17 @@ def ChangerJoueur():
     print(f"On passe au joueur {GetJoueur()}")
 
 
-def Tester3PionsAlignes():
-    pass
+def Tester3PionsAlignes(case):
+    '''
+    Fonction permettant de tester que le joueur courant ne vient pas d'aliger 3 pions
+    après avoir joué son dernier pion
+    :param: case = dernière case jouée
+    :return: True si c'est le cas, False sinon
+    '''
+
+
+
+    return False
 
 
 #
@@ -189,11 +198,12 @@ while True:
 
         PrintPlateau()
 
-        case = GetCase()
+        # Choix de l'action
+        if Communes.pions[0] > 0 and Communes.pions[1] > 0:
+            case = GetCase()
+            PoserPion(case)
 
-        PoserPion(case)
-
-        if Tester3PionsAlignes():
+        if Tester3PionsAlignes(case):
             SupprimerPion(JoueurAdverse())
 
         if EndOfGame():
