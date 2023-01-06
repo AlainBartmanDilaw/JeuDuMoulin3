@@ -196,7 +196,7 @@ def SupprimerPion(adversaire):
 while True:
     try:
 
-        PrintPlateau()
+        case = GetCase()
 
         # Choix de l'action
         if Communes.pions[0] > 0 and Communes.pions[1] > 0:
