@@ -51,7 +51,8 @@ def ControlePosition(case):
     if Communes.plateau[x][y] == Communes.NOCASE:
         raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est inaccessible")
     if Communes.plateau[x][y] != Communes.Empty:
-        raise Exception(f"Impossible de poser le jeton en position {x} {y} - la case est déjà occupée par le joueur {GetJoueur(Communes.plateau[x][y])}")
+        raise Exception(
+            f"Impossible de poser le jeton en position {x} {y} - la case est déjà occupée par le joueur {GetJoueur(Communes.plateau[x][y])}")
 
 
 def PoserPion(case):
@@ -114,7 +115,7 @@ def EndOfGame():
     return False
 
 
-def GetJoueur(Joueur = Communes.joueur):
+def GetJoueur(Joueur=Communes.joueur):
     return NomJoueurs[Joueur]
 
 
@@ -151,9 +152,12 @@ signal.signal(signal.SIGINT, signal_handler)
 InitPlateau7x7()
 
 
+def JoueurAdverse():
+    return (Communes.joueur + 1) % 2
+
 
 def ChangerJoueur():
-    Communes.joueur = (Communes.joueur + 1) % 2
+    Communes.joueur = JoueurAdverse()
     print(f"On passe au joueur {GetJoueur()}")
 
 
@@ -164,6 +168,22 @@ def Tester3PionsAlignes():
 #
 # Boucle principale interactive de test en version console
 #
+def SupprimerPion(adversaire):
+    ok = False
+    while ok != True:
+
+        ok = True
+        # Saisir la case (x,y) à supprimer
+        x = y = 0
+        case = (x, y)
+        # Test case saisie est bien à l'adversaire
+        if Communes.plateau[x][y] != adversaire:
+            ok = False
+            WriteError(f"Le joueur numéro {GetJoueur(adversaire)} n'a pas de pion en position {x},{y}")
+
+        PrendrePion(case)
+
+
 while True:
     try:
 
@@ -173,7 +193,8 @@ while True:
 
         PoserPion(case)
 
-        Tester3PionsAlignes()
+        if Tester3PionsAlignes():
+            SupprimerPion(JoueurAdverse())
 
         if EndOfGame():
             break
